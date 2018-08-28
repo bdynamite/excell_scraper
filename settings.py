@@ -24,7 +24,7 @@ STATIC_ATTRS = {
     'load_discharge': 'D',
     'cargo_type': 'CRUDE OIL'
 }
-DYNAMIC_ATTRS = ['report_date', 'source']
+DYNAMIC_ATTRS = ['report_date', 'port']
 INPUT_COLUMNS = {
     'vessel': 1,
     'ETA': 2,
@@ -38,3 +38,9 @@ INPUT_COLUMNS = {
 INPUT_TABLE_HEADER = (3, 1)
 INPUT_PORT_COLUMN = 1
 INPUT_FIRST_PORT = (4, 1)
+
+input_columns_set = set(list(STATIC_ATTRS.keys()) + DYNAMIC_ATTRS + list(INPUT_COLUMNS.keys()))
+output_columns_set = set(list(OUTPUT_COLUMNS.keys()))
+input_columns_set ^= output_columns_set
+if input_columns_set:
+    raise NameError('Column names for i/o tales are not equal ({})'.format(list(input_columns_set)))
