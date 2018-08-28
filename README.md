@@ -1,6 +1,6 @@
-# excel to csv converter
+# excel table transformer
 
-This script create csv file for each excel sheet.
+This script create template based excel from another file.
 
 # usage
 
@@ -14,16 +14,17 @@ You can use it either in command line or add to your own module.
 
 command line
 ```bash
-python excel_to_csv_converter.py -o <output dir> <excel path>
+python excel_transformer.py  <excel path>
 
-Success! You can find your csv file(s) on this path <output dir>
+Success!
 ```
-wrap your paths in double quotes if they have spaces
-if you skip output dir csv files will be created near excel file in the folder with the same name
+Wrap your paths in double quotes if they have spaces.
 
 module
 ```bash
-from csv_to_excel_converter import csv_to_excel
+from excel_transformer import create_excel
 
 csv_to_excel(excel_path)
 ```
+
+You'll find created file in the input excel folder.
