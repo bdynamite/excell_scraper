@@ -25,24 +25,24 @@ def get_report_date(file):
 
 
 def create_excel(input_path):
-    input_file = openpyxl.load_workbook(input_path)
-    report_date = get_report_date(input_file)
+    input_wb = openpyxl.load_workbook(input_path)
+    report_date = get_report_date(input_wb)
     wb = openpyxl.load_workbook('template.xlsx')
     ws = wb.active
     output_row = ws.max_row + 1
-    for sheet in input_file:
-        port = sheet.cell(*INPUT_FIRST_PORT).value
-        for row_index in range(5, sheet.max_row):
-            if sheet.cell(row_index, INPUT_PORT_COLUMN + 1).value is None:
-                port = sheet.cell(row_index, INPUT_PORT_COLUMN).value
-                continue
-            if sheet.cell(row_index, INPUT_PORT_COLUMN).value == sheet.cell(*INPUT_TABLE_HEADER).value:
-                continue
-            parsing_data = {name: sheet.cell(row_index, column).value for name, column in INPUT_COLUMNS.items()}
-            dynamic_attrs = {'report_date': report_date, 'port': port}
-            create_output_row(ws, output_row, parsing_data, dynamic_attrs)
-            apply_common_style(ws[output_row])
-            output_row += 1
+    sheet = input_wb[input_wb.sheetnames[-1]]
+    port = sheet.cell(*INPUT_FIRST_PORT).value
+    for row_index in range(5, sheet.max_row + 1):
+        if sheet.cell(row_index, INPUT_PORT_COLUMN + 1).value is None:
+            port = sheet.cell(row_index, INPUT_PORT_COLUMN).value
+            continue
+        if sheet.cell(row_index, INPUT_PORT_COLUMN).value == sheet.cell(*INPUT_TABLE_HEADER).value:
+            continue
+        parsing_data = {name: sheet.cell(row_index, column).value for name, column in INPUT_COLUMNS.items()}
+        dynamic_attrs = {'report_date': report_date, 'port': port}
+        create_output_row(ws, output_row, parsing_data, dynamic_attrs)
+        apply_common_style(ws[output_row])
+        output_row += 1
     dir, name = os.path.split(input_path)
     output_path = os.path.join(dir, '{} {}.xlsx'.format(name.split('.')[0], 'COMPILE'))
     wb.save(output_path)
